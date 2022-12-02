@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<odoo>
+        <record id="assign_ticket_view_form_wizard" model="ir.ui.view">
+            <field name="name">cclog.tickets_incidents_assign.form</field>
+            <field name="model">cclog.tickets_incidents_assign_wizard</field>
+            <field name="arch" type="xml">
+                <form string="Re-Assign Ticket">
+                    <group class="oe_title">
+                         
+                         <field name="branch_id" options="{'no_quick_create':True,'no_quick_edit':True,'no_open':True,'no_create': True, 'no_create_edit':True}"/>
+                         <field name="agent" options="{'no_quick_create':True,'no_quick_edit':True,'no_open':True,'no_create': True, 'no_create_edit':True}"/>
+                    </group>
+                    <footer>
+                        <button name="action_assign_agent" string="Assign" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="wizard_assign_form_view_reassign" model="ir.actions.act_window">
+            <field name="name">Assign Ticket</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">cclog.tickets_incidents_assign_wizard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="assign_ticket_view_form_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+</odoo>

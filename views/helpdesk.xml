@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="view_helpdesk_tree" model="ir.ui.view">
+            <field name="name">cclog.request.tree</field>
+            <field name="model">cclog.request</field>
+             <field name="arch" type="xml">
+                <tree string="All Requests" decoration-danger="state=='E'"  default_order='start_date desc'>
+                    
+                    <!--<field name="unique_field" />-->
+                    <field name="title" />
+                    <field name="state" />
+                    <field name="start_date" />
+                    <field name="service_id" />
+                    <field name="service_subcategory_id"/>
+                    <field name="client_id"/>
+                    <field name="branch_id"/>
+                    <field name="agent"/>
+                    
+                    
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ticket_request_form_view">
+            <field name="name">cclog.request.form</field>
+            <field name="model">cclog.request</field>
+            <field name="arch" type="xml">
+                <form string="Create Request" create="false" edit="false">
+                    <header>
+                    <button name="%(cclog.wizard_assign_form_view_reassign)d" states='N' string="Assign Ticket"  class="btn btn-success" type="action" groups="cclog.cclog_agents,cclog.cclog_admin" />
+                    <button name="%(cclog.wizard_assign_form_view_reassign)d" states='A' string="Re Assign Ticket"  class="btn btn-success" type="action" groups="cclog.cclog_admin,cclog.cclog_agents,cclog.support_agents"/>
+                    <button name="%(cclog.wizard_requests_pending_form_view)d" states='A' string="Mark Pending" attrs="{'invisible':['|',('current_agent', '=', False)]}"  type="action" class="btn btn-warning"  />
+                    <button name="%(cclog.wizard_inquire_form_view)d" states='A' string="Inquire on ticket" attrs="{'invisible':['|',('current_agent', '=', False)]}"  type="action" class="btn btn-dark"  />
+                    <button name="%(cclog.wizard_inquire_form_view_res)d" states='A' string="Respond To Inquiry" attrs=""  type="action" class="btn btn-dark"  />
+                    <button name="%(cclog.wizard_requests_resolve)d" states='A,P,RA,RO,E' string="Resolve Ticket" attrs="{'invisible':['|',('current_agent', '=', False)]}"  class="btn btn-primary" type="action" />
+                    <button name="action_reopen" states='R' string="Re Open Ticket" class="btn btn-primary" type="object" groups="cclog.cclog_admin"  />
+                    <button name="%(cclog.wizard_requests_close_form_view)d" states='R' string="Close Ticket" class="btn btn-danger" type="action"  groups="cclog.cclog_admin"  />
+                    <field name ="current_agent" invisible ='1'/>
+                    <field name ="current_user" invisible ='1'/>
+                    <field name="state" widget="statusbar" statusbar_visible="N,A,RA,P,E,R,RO,C" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="client_state" widget="radio" options="{'horizontal': true}" style="color: #e60911; font-weight: bold;"/>
+                        </group>
+                        
+                        <group>
+                            <field name="service_id"  options="{'no_quick_create':True,'no_quick_edit':True,'no_open':True,'no_create': True, 'no_create_edit':True}" />
+                        </group>
+                        <group>
+                            <field name="service_subcategory_id" options="{'no_quick_create':True,'no_quick_edit':True,'no_open':True,'no_create': True, 'no_create_edit':True}" />
+                        </group>
+                
+                        <group>
+                            <field name = "prospect_client" attrs="{'invisible':['|',('client_state', '=', 'yes')]}"/>
+                            <field name="client_id" attrs="{'invisible':['|',('client_state', '=', 'no')]}" options="{'no_quick_create':True,'no_quick_edit':True,'no_open':True,'no_create': True, 'no_create_edit':True}"/>
+                        </group>
+
+                        <group>
+                            <field name="title"/>
+                        </group>
+                        
+                        <group>
+                            <field name="trx_proof"/>
+                            <field name="description"/>
+                        </group>
+            
+                        <group>
+                            <field name="start_date"  invisible="1"/>
+                        </group>
+                        <notebook>
+                            <page string="Inquire on ticket">
+                                <group>
+                                    <field name="Inquire_comment"  readonly="1"/>
+                                    <field name="Inquire_comment_response"  readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="Inquire_date"  readonly="1"/>
+                                    <field name="Inquire_date_response"  readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="Inquired_by"  readonly="1"/>
+                                    <field name="Inquired_by_response"  readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Resolution Information">
+                                <group>
+                                    <field name="resolution_comment"  readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="resolution_date"  readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Pending Information">
+                                <group>
+                                    <field name="pending_comment"  readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="pending_escalation"  readonly="1"/>
+                                    <field name="pending_hour"  readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Closure Information">
+                                <group>
+                                    <field name="rating"  readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="closing_date"  readonly="1"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="ticket_request_search_view">
+            <field name="name">cclog.request.search</field>
+            <field name="model">cclog.request</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="title" />
+                    <field name="description" />
+                    <field name="branch_id" />
+                </search>
+            </field>
+        </record>
+
+
+        <record model="ir.actions.act_window" id="request_list_action">
+            <field name="name">Customer Tickets</field>
+            <field name="res_model">cclog.request</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Customer Tickets</p>
+            </field>
+        </record>
+
+        <menuitem id="main_service_menu" name="cclog"/>
+        <menuitem id="helpdesk_menu" name="Customer Tickets" sequence="1" parent="main_service_menu"/>
+        <menuitem id="ticket_requests" name="Requests" parent="helpdesk_menu" action="request_list_action"/>
+        
+</odoo>

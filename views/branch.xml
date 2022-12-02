@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     
+        <record id="view_spot_check_tree" model="ir.ui.view">
+            <field name="name">cclog.branch.tree</field>
+            <field name="model">cclog.branch</field>
+             <field name="arch" type="xml">
+                <tree string="All Teams">
+                   <field name="status"/>
+                    <field name="team_name"/>
+                    <field name="team_email"/>
+                </tree>
+            </field>
+        </record>
+
+         
+       <record model="ir.ui.view" id="branch_form_cclog_view">
+            <field name="name">cclog.branch.form</field>
+            <field name="model">cclog.branch</field>
+            <field name="arch" type="xml">
+                <form string="Add Teams" create="false" edit="true">
+                    <sheet>
+                        <group>
+                            <field name="status"/>
+                        </group>
+                        <group>
+                            <field name="team_name"/>
+                        </group>
+                         <group>
+                            <field name="team_email"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+       
+      
+        <record model="ir.ui.view" id="branch_search_spot_check_view">
+            <field name="name">cclog.branch.search</field>
+            <field name="model">cclog.branch</field>
+            <field name="arch" type="xml">
+                <search>
+                      <field name="team_name" />
+                      
+                </search>
+            </field>
+        </record>
+        
+       
+        <record model="ir.actions.act_window" id="branch_lists_action">
+            <field name="name">Teams</field>
+            <field name="res_model">cclog.branch</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">Create new Team</p>
+            </field>
+        </record>
+
+        <!-- top level menu: no parent -->
+        <menuitem id="main_service_menu" name="CCLOG"/>
+        <menuitem id="config_menu_cclog" name="Configurations" sequence="11"  parent="main_service_menu" groups="cclog.cclog_agents,cclog.cclog_admin"  />
+        <menuitem id="config_branches" name="Teams" parent="config_menu_cclog" sequence="5"  action="branch_lists_action" groups="cclog.cclog_admin"  />
+     
+</odoo>
